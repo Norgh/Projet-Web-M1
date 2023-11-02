@@ -24,7 +24,8 @@ export class PlainBookPresenter {
       name: data.name,
       genres: data.genres,
       writtenOn: data.writtenOn,
-      author: PlainAuthorPresenter.from(data.author),
+      // Juste si l'auteur est défini pour éviter des erreurs
+      author: (data.author) ? PlainAuthorPresenter.from(data.author) : null
     });
   }
 }
