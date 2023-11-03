@@ -18,15 +18,38 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        
         <div className="menu flex justify-center m-5">
-          <a key="link_home" className="menu_link m-5 hover:opacity-70" href="/">Accueil</a>
-          <a key="link_books" className="menu_link m-5 hover:opacity-70" href="/books">Livres</a>
-          <a key="link_users" className="menu_link m-5 hover:opacity-70" href="/users">Utilisateurs</a>
-          <a key="link_authors" className="menu_link m-5 hover:opacity-70" href="/authors">Auteurs</a>
+          <a
+            key="link_home"
+            className="menu_link m-5 hover:opacity-70"
+            href="/"
+          >
+            Accueil
+          </a>
+          <a
+            key="link_books"
+            className="menu_link m-5 hover:opacity-70"
+            href="/books"
+          >
+            Livres
+          </a>
+          <a
+            key="link_users"
+            className="menu_link m-5 hover:opacity-70"
+            href="/users"
+          >
+            Utilisateurs
+          </a>
+          <a
+            key="link_authors"
+            className="menu_link m-5 hover:opacity-70"
+            href="/authors"
+          >
+            Auteurs
+          </a>
         </div>
-        {children}        
-        </body>
+        {children}
+      </body>
     </html>
   );
 }
