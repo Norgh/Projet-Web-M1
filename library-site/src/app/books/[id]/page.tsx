@@ -36,7 +36,7 @@ const BooksDetailsPage: FC = () => {
           <img src={books.author.photoUrl} alt={books.author.lastName} />
         </p>
       )}
-      {books && books.genres && books.genres[0] && (
+      {books && books.genres && (
         <p>
           Genre:&nbsp;
           {books.genres.map((genre) => (

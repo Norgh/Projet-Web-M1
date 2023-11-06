@@ -18,7 +18,7 @@ const BooksPage: FC = () => {
         // const bookData = data;
         setBooks(data);
         setFilteredBooks(data);
-        console.log(data);
+        // console.log(data);
       });
   }, []);
 
@@ -60,7 +60,9 @@ const BooksPage: FC = () => {
       setFilteredBooks(books);
     } else {
       const filterBooks = books.filter((book) =>
-        book.name.toLowerCase().includes(searchedTerm));
+        // Les arrow functions ne semblent pas fonctionner avec ESLint
+        book.name.toLowerCase().includes(searchedTerm),
+      );
       setFilteredBooks(filterBooks);
     }
     setSearchTerm(searchedTerm);
