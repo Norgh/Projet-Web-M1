@@ -17,7 +17,7 @@ const BooksPage: FC = () => {
         // const bookData = data;
         setBooks(data);
         setFilteredBooks(data);
-        // console.log(data)
+        console.log(data)
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des livres :', error);
@@ -37,14 +37,18 @@ const BooksPage: FC = () => {
     setFilteredBooks(sortedBooks);
   };
 
-  // Trier par genres (pour l'instant c'est par ID parce qu'on n'a pas de genre)
+  // Trier par genres
   const SortByGenres = (): void => {
     const sortedBooks = [...filteredBooks];
     sortedBooks.sort((a, b) => {
-      if (sortBy === 'asc') {
-        return a.id.localeCompare(b.id);
+      if (a && a.genres && a.genres.length > 0 && b && b.genres && b.genres.length > 0) {
+        if (sortBy === 'asc') {
+          return a.genres[0].localeCompare(b.genres[0]);
+        } else {
+          return b.genres[0].localeCompare(a.genres[0]);
+        }
       }
-      return b.id.localeCompare(a.id);
+      return 0; // Gérez le cas où l'un des objets est nul ou les tableaux "genres" sont vides.
     });
     setSortBy(sortBy === 'asc' ? 'desc' : 'asc');
     setFilteredBooks(sortedBooks);
@@ -89,7 +93,7 @@ const BooksPage: FC = () => {
         className="bg-gray-700 text-white py-2 px-4 rounded-lg m-2 hover:opacity-70"
         onClick={SortByGenres}
       >
-        Trier par genres (actuellement par ID)
+        Trier par genres
       </button>
       <br />
       <br />
@@ -101,8 +105,13 @@ const BooksPage: FC = () => {
               <b>{book.name}</b>
             </p>
             <p>
-              ID:
-              {book.id}
+              Genre:
+              {book.genres}
+            </p>
+            <p>
+              Autheur:
+              {book.author.lastName}
+              {book.author.firstName}
             </p>
             <p>
               Année de publication:
