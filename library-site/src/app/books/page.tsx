@@ -2,6 +2,7 @@
 
 import React, { FC, useEffect, useState } from 'react';
 import { PlainBookModel } from '../../models/book.model';
+// import Modal from '../../components/modal/bookModal';
 
 const BooksPage: FC = () => {
   const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
@@ -17,10 +18,7 @@ const BooksPage: FC = () => {
         // const bookData = data;
         setBooks(data);
         setFilteredBooks(data);
-        console.log(data)
-      })
-      .catch((error) => {
-        console.error('Erreur lors de la récupération des livres :', error);
+        console.log(data);
       });
   }, []);
 
@@ -43,6 +41,7 @@ const BooksPage: FC = () => {
     sortedBooks.sort((a, b) => {
       if (a?.genres.length && b?.genres.length) {
         if (sortBy === 'asc') {
+          // Le if du dessus nous assure que les valeurs existent bien
           return a.genres[0].localeCompare(b.genres[0]);
         }
         return b.genres[0].localeCompare(a.genres[0]);
@@ -100,20 +99,21 @@ const BooksPage: FC = () => {
         <div key={book.id} className="p-4">
           <a href={`books/${book.id}`}>
             <p className="text-lg font-semibold">
-              Nom:
+              Nom:&nbsp;
               <b>{book.name}</b>
             </p>
             <p>
-              Genre:
+              Genre:&nbsp;
               {book.genres}
             </p>
             <p>
-              Autheur:
+              Autheur:&nbsp;
               {book.author.lastName}
+              &nbsp;
               {book.author.firstName}
             </p>
             <p>
-              Année de publication:
+              Année de publication:&nbsp;
               {book.writtenOn}
             </p>
           </a>
