@@ -24,7 +24,7 @@ export class PlainBookPresenter {
       name: data.name,
       genres: data.genres,
       writtenOn: data.writtenOn,
-      author: PlainAuthorPresenter.from(data.author)
+      author: PlainAuthorPresenter.from(data.author),
     });
   }
 }
