@@ -5,6 +5,7 @@ export type PlainBookModel = {
     id: string,
     firstName: string,
     lastName: string,
+    photoUrl: string,
   };
   writtenOn: string;
   genres: [];
