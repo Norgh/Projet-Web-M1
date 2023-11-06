@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundError } from 'library-api/src/common/errors';
-import { Book, BookId } from 'library-api/src/entities';
+import {
+  Book,
+  BookGenre,
+  BookGenreId,
+  BookId,
+  Genre,
+} from 'library-api/src/entities';
 import {
   BookRepositoryOutput,
   PlainBookRepositoryOutput,
@@ -45,6 +51,50 @@ export class BookRepository extends Repository<Book> {
     if (!book) {
       throw new NotFoundError(`Book - '${id}'`);
     }
+    return adaptBookEntityToBookModel(book);
+  }
+
+  /**
+   * Create a new book
+   * @param bookData Book's data
+   * @returns Created book
+   * @throws 400: invalid data
+   */
+  public async createBook(
+    bookData: BookRepositoryOutput,
+  ): Promise<BookRepositoryOutput> {
+    const book = this.create(bookData);
+    await this.save(book);
+
+    return adaptBookEntityToBookModel(book);
+  }
+
+  /**
+   * Add a genre to a book and save it in the database
+   * @param bookId Book's ID
+   * @param genreId Genre's ID
+   * @returns Updated book
+   */
+  public async createBookGenres(
+    bookId: BookId,
+    genre: Genre,
+  ): Promise<BookRepositoryOutput> {
+    const book = await this.findOne({
+      where: { id: bookId },
+      relations: { bookGenres: { genre: true }, author: true },
+    });
+    if (!book) {
+      throw new NotFoundError(`Book - '${bookId}'`);
+    }
+
+    const bookGenre = new BookGenre();
+    bookGenre.id = genre.id.toString() as BookGenreId;
+    bookGenre.book = book;
+    bookGenre.genre = genre;
+
+    book.bookGenres.push(bookGenre);
+    await bookGenre.save();
+
     return adaptBookEntityToBookModel(book);
   }
 }

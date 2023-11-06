@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react';
 import { PlainBookModel } from '../../../models/book.model';
@@ -33,7 +34,7 @@ const BooksDetailsPage: FC = () => {
       )}
       {books && books.author && books.author.photoUrl && (
         <p>
-          <img src={books.author.photoUrl} alt={books.author.lastName} />
+          <Image src={books.author.photoUrl} alt={books.author.lastName} />
         </p>
       )}
       {books && books.genres && (
