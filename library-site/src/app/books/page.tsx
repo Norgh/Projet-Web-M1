@@ -104,7 +104,12 @@ const BooksPage: FC = () => {
             </p>
             <p>
               Genre:&nbsp;
-              {book.genres}
+              {book.genres.map((genre) => (
+                <span>
+                  {genre}
+                  &nbsp;
+                </span>
+              ))}
             </p>
             <p>
               Autheur:&nbsp;
