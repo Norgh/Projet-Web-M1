@@ -41,12 +41,11 @@ const BooksPage: FC = () => {
   const SortByGenres = (): void => {
     const sortedBooks = [...filteredBooks];
     sortedBooks.sort((a, b) => {
-      if (a && a.genres && a.genres.length > 0 && b && b.genres && b.genres.length > 0) {
+      if (a?.genres.length && b?.genres.length) {
         if (sortBy === 'asc') {
           return a.genres[0].localeCompare(b.genres[0]);
-        } else {
-          return b.genres[0].localeCompare(a.genres[0]);
         }
+        return b.genres[0].localeCompare(a.genres[0]);
       }
       return 0; // Gérez le cas où l'un des objets est nul ou les tableaux "genres" sont vides.
     });
