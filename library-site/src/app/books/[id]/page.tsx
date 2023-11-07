@@ -34,7 +34,12 @@ const BooksDetailsPage: FC = () => {
       )}
       {books && books.author && books.author.photoUrl && (
         <p>
-          <Image src={books.author.photoUrl} alt={books.author.lastName} />
+          <Image
+            src={books.author.photoUrl}
+            alt={books.author.lastName}
+            width="200"
+            height="200"
+          />
         </p>
       )}
       {books && books.genres && (
