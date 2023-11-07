@@ -38,7 +38,7 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
               return p2.id.localeCompare(p1.id);
             }
 
-            if (sort.field === 'name') {
+            if (sort.field === 'title') {
               if (sort.direction === 'asc') {
                 return p1.name.localeCompare(p2.name);
               }
