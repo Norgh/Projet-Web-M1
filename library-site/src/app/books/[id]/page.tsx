@@ -34,8 +34,9 @@ const BooksDetailsPage: FC = () => {
         </p>
       )}
       {books && books.author && books.author.photoUrl && (
-        <p>
+        <p className="flex justify-center">
           <Image
+            className="m-3"
             src={path + books.author.photoUrl}
             alt={`${books.author.firstName} ${books.author.lastName}`}
             width={250}
@@ -48,7 +49,7 @@ const BooksDetailsPage: FC = () => {
           Genre:&nbsp;
           {books.genres.map((genre) => (
             <span>
-              {genre.name}
+              {genre}
               &nbsp;
             </span>
           ))}
