@@ -7,6 +7,7 @@ import { PlainBookModel } from '../../../models/book.model';
 
 const BooksDetailsPage: FC = () => {
   const { id } = useParams();
+  const path = '/images/authors/';
   const [books, setBooks] = useState<PlainBookModel>();
 
   // Récupération des livres depuis l'API
@@ -35,10 +36,10 @@ const BooksDetailsPage: FC = () => {
       {books && books.author && books.author.photoUrl && (
         <p>
           <Image
-            src={books.author.photoUrl}
-            alt={books.author.lastName}
-            width="200"
-            height="200"
+            src={path + books.author.photoUrl}
+            alt={`${books.author.firstName} ${books.author.lastName}`}
+            width={250}
+            height={250}
           />
         </p>
       )}
