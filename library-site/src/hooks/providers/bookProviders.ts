@@ -1,25 +1,21 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useState, useEffect } from 'react';
-import { PlainBookModel, Sort } from '@/models';
+import { AddBookInput, PlainBookModel, Sort } from '@/models';
 
 type UseListBooksProvider = {
   books: PlainBookModel[];
+  add: (addInput: AddBookInput) => void;
 };
 
 type ListBooksInput = {
   search?: string;
   sort?: Sort;
+  genres?: string[];
 };
 
 export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
   const [books, setBooks] = useState<PlainBookModel[]>([]);
 
-  /* const fetchBooks = (): void => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/books`)
-      .then((data) => setBooks(data.data))
-      .catch((err) => console.error(err));
-  }; */
   useEffect(() => {
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/books`)
@@ -48,8 +44,15 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
 
             return 0;
           })
-          .filter(
-            ({ name }) => (input?.search ? name.toLowerCase().includes(input.search.toLowerCase()) : true),
+          .filter(({ name }) =>
+            (input?.search
+              ? name.toLowerCase().includes(input.search.toLowerCase())
+              : true),
+          )
+          .filter(({ genres }) =>
+            (input?.genres?.length
+              ? genres.some((genre) => input.genres!.includes(genre))
+              : true),
           );
 
         setBooks(sortedBooks);
@@ -60,7 +63,19 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
       });
   }, [input?.search, input?.sort]);
 
-  return { books };
+  const addBook = (addInput: AddBookInput): void => {
+    axios
+      .post<AddBookInput, AxiosResponse<PlainBookModel>>(
+        `${process.env.NEXT_PUBLIC_API_URL}/books`,
+        addInput,
+      )
+      .then((data) => {
+        setBooks([...books, data.data]);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  return { books, add: addBook };
 };
 
 type BookProviders = {

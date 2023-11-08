@@ -10,3 +10,10 @@ export type PlainBookModel = {
   writtenOn: string;
   genres: [];
 };
+
+export type AddBookInput = {
+  name: string;
+  authorId: string;
+  writtenOn: string;
+  genres: string[];
+};

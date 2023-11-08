@@ -1,15 +1,17 @@
 'use client';
 
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { PlainBookModel, Sort } from '@/models';
+import React, { ChangeEvent, FC, useState } from 'react';
+import { Sort } from '@/models';
 import { useListBooks } from '@/hooks';
-// import Modal from '../../components/modal/bookModal';
+import { useListGenres } from '@/hooks/providers/genreProviders'; 
 
 type BookFiltersProps = {
   sort: Sort;
   setSort: (input: Sort) => void;
   search: string;
   setSearch: (input: string) => void;
+  filterGenres: string[];
+  setFilterGenres: (input: string[]) => void;
 };
 
 const BookFilters: FC<BookFiltersProps> = ({
@@ -17,13 +19,30 @@ const BookFilters: FC<BookFiltersProps> = ({
   setSort,
   search,
   setSearch,
+  filterGenres,
+  setFilterGenres,
 }) => {
   const sorts: Sort[] = [
     { field: 'id', direction: 'asc' },
     { field: 'id', direction: 'desc' },
-    { field: 'name', direction: 'asc' },
-    { field: 'name', direction: 'desc' },
+    { field: 'title', direction: 'asc' },
+    { field: 'title', direction: 'desc' },
   ];
+
+  const { genres } = useListGenres();
+  const [genreSelect, setGenreSelect] = useState<string>(genres[0]?.name);
+
+  const removeGenre = (genre: string): void => {
+    setFilterGenres(
+      filterGenres.filter((filterGenre) => filterGenre !== genre),
+    );
+  };
+
+  const addType = (): void => {
+    if (genreSelect && !filterGenres.includes(genreSelect)) {
+      setFilterGenres([...filterGenres, genreSelect]);
+    }
+  };
 
   return (
     <div>
@@ -51,14 +70,47 @@ const BookFilters: FC<BookFiltersProps> = ({
           {currentSort.field} {currentSort.direction}
         </button>
       ))}
-      <br />
+      <div className="w-100">
+        <select
+          onChange={(e: ChangeEvent<HTMLInputElement>): void => {
+            e.preventDefault();
+            setGenreSelect(e.target.value);
+          }}
+          className="text-black w-64 p-2 roundedw-64 p-2 rounded border border-gray-300 focus:outline-none text-black"
+        >
+          {genres.map((genre) => (
+            <option value={genre.name}>{genre.name}</option>
+          ))}
+        </select>
+        <button
+          className="bg-gray-700 text-white py-2 px-4 rounded-lg m-2 hover:opacity-70"
+          type="button"
+          onClick={addType}
+        >
+          Add filter
+        </button>
+        <div className="flex flex-row gap-4">
+          {filterGenres.map((genre) => (
+            <button
+              className="border-2 border-grey-400 rounded-lg p-2"
+              key={genre}
+              type="button"
+              onClick={(): void => removeGenre(genre)}
+            >
+              {genre} X
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
+
 const BooksPage: FC = () => {
   const [sort, setSort] = useState<Sort>({ field: 'id', direction: 'asc' });
   const [search, setSearch] = useState('');
-  const { books } = useListBooks({ sort, search });
+  const [filterGenres, setFilterGenres] = useState<string[]>([]);
+  const { books } = useListBooks({ sort, search, genres: filterGenres });
 
   return (
     <div className="text-center">
@@ -68,18 +120,17 @@ const BooksPage: FC = () => {
         setSort={setSort}
         search={search}
         setSearch={setSearch}
+        filterGenres={filterGenres}
+        setFilterGenres={setFilterGenres}
       />
       <div className="flex justify-evenly flex-wrap gap-6 p-6">
         {books.map((book) => (
           <div
             key={book.id}
-            className="border-4 border-red-700 p-4 w-1/4 rounded-lg"
+            className="bg-orange-800 border-2 border-orange-950 p-4 w-60 h-72 rounded-2xl"
           >
             <a href={`books/${book.id}`}>
-              <p className="text-lg font-semibold">
-                Nom:&nbsp;
-                <b>{book.name}</b>
-              </p>
+              <h2 className="text-2xl font-semibold mb-8">{book.name}</h2>
               <p>
                 Genre:&nbsp;
                 {book.genres.map((genre) => (
