@@ -1,6 +1,7 @@
 'use client';
 
 import React, { FC, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { PlainAuthorModel } from '../../models/author.model';
 
 const AuthorsPage: FC = () => {
@@ -8,7 +9,7 @@ const AuthorsPage: FC = () => {
     [],
   );
   const [, setAuthors] = useState<PlainAuthorModel[]>([]);
-
+  const path = '/images/authors/';
   // Récupération des auteurs depuis l'API (pas encore implémenté du côté API)
   useEffect(() => {
     fetch('http://localhost:3001/authors')
@@ -17,7 +18,7 @@ const AuthorsPage: FC = () => {
         // const AuthorData = data;
         setAuthors(data);
         setFilteredAuthors(data);
-        // console.log(data)
+        console.log(data);
       })
       .catch((error) => {
         console.error('Erreur lors de la récupération des auteurs :', error);
@@ -35,10 +36,9 @@ const AuthorsPage: FC = () => {
       />
       <br />
       <br />
-      {/* ----- Implémentation de l'API Authors requise ----- */}
-      {/* {filteredAuthors.map((authors) => (
+      {filteredAuthors.map((authors) => (
         <div key={authors.id} className="p-4">
-          <a href={`Authors/${authors.id}`}>
+          <a href={`authors/${authors.id}`}>
             <p>
               ID:
               {authors.id}
@@ -51,13 +51,19 @@ const AuthorsPage: FC = () => {
               Nom de famille:
               <b>{authors.lastName}</b>
             </p>
-            <p>
-              Photo:
-              {authors.photoUrl}
-            </p>
+            {authors?.photoUrl && (
+              <p>
+                <Image
+                  src={path + authors.photoUrl}
+                  alt={`${authors.firstName} ${authors.lastName}`}
+                  width={250}
+                  height={250}
+                />
+              </p>
+            )}
           </a>
         </div>
-      ))} */}
+      ))}
     </div>
   );
 };
