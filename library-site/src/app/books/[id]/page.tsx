@@ -17,14 +17,21 @@ const BooksDetailsPage: FC = () => {
       .then((data) => {
         // const bookData = data;
         setBooks(data);
-        console.log(data);
+        // console.log(data);
       });
   }, [id]);
 
   return (
     <div className="text-center">
+      <p className="m-2">
+        <a
+          className="bg-gray-700 text-white py-2 px-4 rounded-lg m-2 hover:opacity-70 w-1/4 mx-auto"
+          href="../books"
+        >
+          Retour à liste des livres
+        </a>
+      </p>
       {books && <h1 className="text-2xl font-bold">{books.name}</h1>}
-      <br />
       <br />
       {books && (
         <p>
