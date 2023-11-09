@@ -3,23 +3,12 @@
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import React, { FC, useEffect, useState } from 'react';
-import { PlainBookModel } from '../../../models/book.model';
+import { useGetBook } from '@/hooks';
 
 const BooksDetailsPage: FC = () => {
   const { id } = useParams();
   const path = '/images/authors/';
-  const [books, setBooks] = useState<PlainBookModel>();
-
-  // Récupération des livres depuis l'API
-  useEffect(() => {
-    fetch(`http://localhost:3001/books/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // const bookData = data;
-        setBooks(data);
-        // console.log(data);
-      });
-  }, [id]);
+  const { book, update } = useGetBook(id as string);
 
   return (
     <div className="text-center">
@@ -31,32 +20,32 @@ const BooksDetailsPage: FC = () => {
           Retour à liste des livres
         </a>
       </p>
-      {books && <h1 className="text-2xl font-bold">{books.name}</h1>}
+      {book && <h1 className="text-2xl font-bold">{book.name}</h1>}
       <br />
-      {books && (
+      {book && (
         <p>
-          {books.author.firstName}
+          {book.author.firstName}
           &nbsp;
-          {books.author.lastName}
+          {book.author.lastName}
         </p>
       )}
-      {books && books.author && books.author.photoUrl && (
+      {book && book.author && book.author.photoUrl && (
         <p className="flex justify-center">
           <Image
             className="m-3"
-            src={path + books.author.photoUrl}
-            alt={`${books.author.firstName} ${books.author.lastName}`}
+            src={path + book.author.photoUrl}
+            alt={`${book.author.firstName} ${book.author.lastName}`}
             width={250}
             height={250}
           />
         </p>
       )}
-      {books && books.genres && (
+      {book && book.genres && (
         <p>
           Genre:&nbsp;
-          {books.genres.map((genre) => (
+          {book.genres.map((genre) => (
             <span>
-              {genre}
+              {genre.name}
               &nbsp;
             </span>
           ))}

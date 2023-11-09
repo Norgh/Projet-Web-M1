@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { useState, useEffect } from 'react';
-import { AddBookInput, PlainBookModel, Sort } from '@/models';
+import { AddBookInput, PlainBookModel, PlainGenreModel, Sort } from '@/models';
 
 type UseListBooksProvider = {
   books: PlainBookModel[];
@@ -10,7 +10,7 @@ type UseListBooksProvider = {
 type ListBooksInput = {
   search?: string;
   sort?: Sort;
-  genres?: string[];
+  genres?: PlainGenreModel[];
 };
 
 export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
@@ -23,6 +23,8 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
         const booksData = data.data;
 
         const sort = input?.sort ?? { field: 'year', direction: 'asc' };
+
+        const arrayOfIds: string[] = input?.genres?.map((obj) => obj.id) || [];
 
         const sortedBooks = (booksData as PlainBookModel[])
           .sort((p1, p2) => {
@@ -51,7 +53,7 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
           )
           .filter(({ genres }) =>
             (input?.genres?.length
-              ? genres.some((genre) => input.genres!.includes(genre))
+              ? genres.some((genre) => arrayOfIds!.includes(genre.id))
               : true),
           );
 
@@ -78,10 +80,37 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
   return { books, add: addBook };
 };
 
-type BookProviders = {
-  useListBooks: () => UseListBooksProvider;
+type UseGetBookProvider = {
+  book: PlainBookModel | undefined;
+  update: (addInput: AddBookInput) => void;
 };
 
-export const useBooksProviders = (): BookProviders => ({
-  useListBooks,
-});
+export const useGetBook = (id: string): UseGetBookProvider => {
+  const [book, setBook] = useState<PlainBookModel>();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`)
+      .then((data) => {
+        setBook(data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+        setBook(undefined);
+      });
+  }, [book, id]);
+
+  const updateBook = (addInput: AddBookInput): void => {
+    axios
+      .post<AddBookInput, AxiosResponse<PlainBookModel>>(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${id}`,
+        addInput,
+      )
+      .then((data) => {
+        setBook(data.data);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  return { book, update: updateBook };
+};

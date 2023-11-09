@@ -91,6 +91,7 @@ export class BookRepository extends Repository<Book> {
 
         await manager.save<BookGenre>(
           newGenres.map((genre) =>
+            // eslint-disable-next-line implicit-arrow-linebreak
             manager.create<BookGenre>(BookGenre, {
               id: v4(),
               book: { id: book.id },

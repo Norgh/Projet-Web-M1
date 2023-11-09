@@ -10,9 +10,9 @@ export class PlainBookPresenter {
 
   writtenOn: Date;
 
-  author: PlainAuthorPresenter;
+  genres: GenrePresenter[];
 
-  genres: string[];
+  author: PlainAuthorPresenter;
 
   private constructor(data: PlainBookPresenter) {
     Object.assign(this, data);
@@ -22,9 +22,9 @@ export class PlainBookPresenter {
     return new PlainBookPresenter({
       id: data.id,
       name: data.name,
-      genres: data.genres,
       writtenOn: data.writtenOn,
       author: PlainAuthorPresenter.from(data.author),
+      genres: data.genres.map(GenrePresenter.from),
     });
   }
 }
@@ -38,7 +38,7 @@ export class BookPresenter {
 
   writtenOn: Date;
 
-  genres: GenrePresenter[];
+  genres: string[];
 
   private constructor(data: BookPresenter) {
     Object.assign(this, data);
@@ -50,7 +50,7 @@ export class BookPresenter {
       name: data.name,
       writtenOn: data.writtenOn,
       author: PlainAuthorPresenter.from(data.author),
-      genres: data.genres.map(GenrePresenter.from),
+      genres: data.genres,
     });
   }
 }

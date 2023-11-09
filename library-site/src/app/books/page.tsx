@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ChangeEvent, FC, useState } from 'react';
-import { AddBookInput, Sort } from '@/models';
+import { AddBookInput, PlainGenreModel, Sort } from '@/models';
 import { useListBooks } from '@/hooks';
 import { useListGenres } from '@/hooks/providers/genreProviders';
 import { AddBookModal } from '@/components/modal/bookModal';
@@ -11,8 +11,8 @@ type BookFiltersProps = {
   setSort: (input: Sort) => void;
   search: string;
   setSearch: (input: string) => void;
-  filterGenres: string[];
-  setFilterGenres: (input: string[]) => void;
+  filterGenres: PlainGenreModel[];
+  setFilterGenres: (input: PlainGenreModel[]) => void;
 };
 
 const BookFilters: FC<BookFiltersProps> = ({
@@ -31,11 +31,11 @@ const BookFilters: FC<BookFiltersProps> = ({
   ];
 
   const { genres } = useListGenres();
-  const [genreSelect, setGenreSelect] = useState<string>(genres[0]?.name);
+  const [genreSelect, setGenreSelect] = useState<PlainGenreModel>(genres[0]);
 
   const removeGenre = (genre: string): void => {
     setFilterGenres(
-      filterGenres.filter((filterGenre) => filterGenre !== genre),
+      filterGenres.filter((filterGenre) => filterGenre.id !== genre),
     );
   };
 
@@ -75,12 +75,17 @@ const BookFilters: FC<BookFiltersProps> = ({
         <select
           onChange={(e: ChangeEvent<HTMLSelectElement>): void => {
             e.preventDefault();
-            setGenreSelect(e.target.value);
+            const selectedGenre = genres.find(
+              (genre) => genre.id === e.target.value,
+            );
+            if (selectedGenre) {
+              setGenreSelect(selectedGenre);
+            }
           }}
           className="text-black w-64 p-2 roundedw-64 p-2 rounded border border-gray-300 focus:outline-none text-black"
         >
           {genres.map((genre) => (
-            <option value={genre.name}>{genre.name}</option>
+            <option value={genre.id}>{genre.name}</option>
           ))}
         </select>
         <button
@@ -93,12 +98,13 @@ const BookFilters: FC<BookFiltersProps> = ({
         <div className="flex flex-row gap-4">
           {filterGenres.map((genre) => (
             <button
-              className="border-2 border-grey-400 rounded-lg p-2"
-              key={genre}
+              className="border-2 border-grey-400 rounded-lg p-2 bg-gray-700"
+              key={genre.id}
               type="button"
-              onClick={(): void => removeGenre(genre)}
+              onClick={(): void => removeGenre(genre.id)}
             >
-              {genre} X
+              {genre.name}
+              <span className="ml-2 text-red-600 font-black">X</span>
             </button>
           ))}
         </div>
@@ -110,9 +116,10 @@ const BookFilters: FC<BookFiltersProps> = ({
 const BooksPage: FC = () => {
   const [sort, setSort] = useState<Sort>({ field: 'year', direction: 'asc' });
   const [search, setSearch] = useState('');
-  const [filterGenres, setFilterGenres] = useState<string[]>([]);
+  const [filterGenres, setFilterGenres] = useState<PlainGenreModel[]>([]);
   const { books, add } = useListBooks({ sort, search, genres: filterGenres });
   const [isAddMode, setIsAddMode] = useState<boolean>(false);
+  const path = '/images/authors/';
 
   return (
     <div className="text-center">
@@ -137,31 +144,31 @@ const BooksPage: FC = () => {
       />
       <div className="flex justify-evenly flex-wrap gap-6 p-6">
         {books.map((book) => (
-          <div
-            key={book.id}
-            className="bg-orange-800 border-2 border-orange-950 p-4 w-60 h-72 rounded-2xl"
-          >
-            <a href={`books/${book.id}`}>
-              <h2 className="text-2xl font-semibold mb-8">{book.name}</h2>
-              <p>
-                Genre:&nbsp;
+          <div key={book.id}>
+            <a
+              className="flex flex-col items-center bg-orange-800 border-2 border-orange-950 p-4 w-60 h-72 rounded-2xl relative bg-clip-border bg-origin-border bg-center bg-no-repeat bg-contain"
+              style={{ backgroundImage: `url(${path + book.author.photoUrl})` }}
+              href={`books/${book.id}`}
+            >
+              <h2 className="text-2xl font-semibold mb-1">{book.name}</h2>
+              <div className="-rotate-90 absolute -left-4 bottom-7 text-xs flex flex-col">
                 {book.genres.map((genre) => (
-                  <span>
-                    {genre}
+                  <p>
+                    {genre.name}
                     &nbsp;
-                  </span>
+                  </p>
                 ))}
+              </div>
+              <p className="absolute top-1/2">
+                par
+                <br />
+                <span className="underline text-2xl">
+                  {book.author.lastName}
+                  &nbsp;
+                  {book.author.firstName}
+                </span>
               </p>
-              <p>
-                Autheur:&nbsp;
-                {book.author.lastName}
-                &nbsp;
-                {book.author.firstName}
-              </p>
-              <p>
-                Année de publication:&nbsp;
-                {book.writtenOn}
-              </p>
+              <p className="absolute bottom-0 text-center w-max">{book.writtenOn}</p>
             </a>
           </div>
         ))}
