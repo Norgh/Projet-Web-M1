@@ -8,6 +8,7 @@ import {
   Genre,
 } from 'library-api/src/entities';
 import {
+  AddBookRepositoryInput,
   BookRepositoryOutput,
   PlainBookRepositoryOutput,
 } from 'library-api/src/repositories/books/book.repository.type';
@@ -15,7 +16,8 @@ import {
   adaptBookEntityToBookModel,
   adaptBookEntityToPlainBookModel,
 } from 'library-api/src/repositories/books/book.utils';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class BookRepository extends Repository<Book> {
@@ -61,12 +63,49 @@ export class BookRepository extends Repository<Book> {
    * @throws 400: invalid data
    */
   public async createBook(
-    bookData: BookRepositoryOutput,
-  ): Promise<BookRepositoryOutput> {
-    const book = this.create(bookData);
-    await this.save(book);
+    bookData: AddBookRepositoryInput,
+  ): Promise<PlainBookRepositoryOutput> {
+    // const book = this.create(bookData);
+    // await this.save(book);
+    const id = await this.dataSource.transaction(async (manager) => {
+      const [book] = await manager.save<Book>(
+        manager.create<Book>(Book, [
+          {
+            ...bookData,
+            author: { id: bookData.authorId },
+            id: v4(),
+          },
+        ]),
+      );
 
-    return adaptBookEntityToBookModel(book);
+      if (bookData.genresId) {
+        await manager.delete<BookGenre>(BookGenre, {
+          book: { id: book.id },
+        });
+
+        const newGenres = await manager.find<Genre>(Genre, {
+          where: {
+            id: In(bookData.genresId),
+          },
+        });
+
+        await manager.save<BookGenre>(
+          newGenres.map((genre) =>
+            manager.create<BookGenre>(BookGenre, {
+              id: v4(),
+              book: { id: book.id },
+              genre,
+            }),
+          ),
+        );
+      }
+
+      return book.id;
+    });
+
+    return this.getById(id);
+
+    // return adaptBookEntityToBookModel(book);
   }
 
   /**

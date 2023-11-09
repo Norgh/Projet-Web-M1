@@ -1,9 +1,10 @@
 'use client';
 
 import React, { ChangeEvent, FC, useState } from 'react';
-import { Sort } from '@/models';
+import { AddBookInput, Sort } from '@/models';
 import { useListBooks } from '@/hooks';
-import { useListGenres } from '@/hooks/providers/genreProviders'; 
+import { useListGenres } from '@/hooks/providers/genreProviders';
+import { AddBookModal } from '@/components/modal/bookModal';
 
 type BookFiltersProps = {
   sort: Sort;
@@ -23,8 +24,8 @@ const BookFilters: FC<BookFiltersProps> = ({
   setFilterGenres,
 }) => {
   const sorts: Sort[] = [
-    { field: 'id', direction: 'asc' },
-    { field: 'id', direction: 'desc' },
+    { field: 'year', direction: 'asc' },
+    { field: 'year', direction: 'desc' },
     { field: 'title', direction: 'asc' },
     { field: 'title', direction: 'desc' },
   ];
@@ -72,7 +73,7 @@ const BookFilters: FC<BookFiltersProps> = ({
       ))}
       <div className="w-100">
         <select
-          onChange={(e: ChangeEvent<HTMLInputElement>): void => {
+          onChange={(e: ChangeEvent<HTMLSelectElement>): void => {
             e.preventDefault();
             setGenreSelect(e.target.value);
           }}
@@ -87,7 +88,7 @@ const BookFilters: FC<BookFiltersProps> = ({
           type="button"
           onClick={addType}
         >
-          Add filter
+          Ajouter le filtre
         </button>
         <div className="flex flex-row gap-4">
           {filterGenres.map((genre) => (
@@ -107,14 +108,25 @@ const BookFilters: FC<BookFiltersProps> = ({
 };
 
 const BooksPage: FC = () => {
-  const [sort, setSort] = useState<Sort>({ field: 'id', direction: 'asc' });
+  const [sort, setSort] = useState<Sort>({ field: 'year', direction: 'asc' });
   const [search, setSearch] = useState('');
   const [filterGenres, setFilterGenres] = useState<string[]>([]);
-  const { books } = useListBooks({ sort, search, genres: filterGenres });
+  const { books, add } = useListBooks({ sort, search, genres: filterGenres });
+  const [isAddMode, setIsAddMode] = useState<boolean>(false);
 
   return (
     <div className="text-center">
       <h1 className="text-2xl font-bold">Bibliothèque</h1>
+      <div className="flex justify-center pt-2">
+        <button
+          type="button"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-2xl"
+          onClick={(): void => setIsAddMode(true)}
+        >
+          Ajouter
+          <span className="ml-2">+</span>
+        </button>
+      </div>
       <BookFilters
         sort={sort}
         setSort={setSort}
@@ -154,6 +166,11 @@ const BooksPage: FC = () => {
           </div>
         ))}
       </div>
+      <AddBookModal
+        isOpen={isAddMode}
+        onClose={(): void => setIsAddMode(false)}
+        SetBook={(book: AddBookInput): void => add(book)}
+      />
     </div>
   );
 };

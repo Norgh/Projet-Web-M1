@@ -5,7 +5,7 @@ export type PlainBookModel = {
     id: string;
     firstName: string;
     lastName: string;
-    photoUrl: string;
+    photoUrl?: string;
   };
   writtenOn: string;
   genres: [];
@@ -13,7 +13,7 @@ export type PlainBookModel = {
 
 export type AddBookInput = {
   name: string;
-  authorId: string;
   writtenOn: string;
-  genres: string[];
+  authorId: string;
+  genresId: string[];
 };

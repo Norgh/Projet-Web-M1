@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BookId, Genre } from 'library-api/src/entities';
 import { BookRepository } from 'library-api/src/repositories';
 import {
+  AddBookUseCaseInput,
   BookUseCasesOutput,
   PlainBookUseCasesOutput,
 } from 'library-api/src/useCases/books/book.useCases.type';
@@ -35,8 +36,8 @@ export class BookUseCases {
    * @throws 400: invalid data
    */
   public async createBook(
-    bookData: BookUseCasesOutput,
-  ): Promise<BookUseCasesOutput> {
+    bookData: AddBookUseCaseInput,
+  ): Promise<PlainBookUseCasesOutput> {
     return this.bookRepository.createBook(bookData);
   }
 

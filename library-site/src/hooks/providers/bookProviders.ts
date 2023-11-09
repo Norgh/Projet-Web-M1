@@ -22,16 +22,16 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
       .then((data) => {
         const booksData = data.data;
 
-        const sort = input?.sort ?? { field: 'id', direction: 'asc' };
+        const sort = input?.sort ?? { field: 'year', direction: 'asc' };
 
         const sortedBooks = (booksData as PlainBookModel[])
           .sort((p1, p2) => {
-            if (sort.field === 'id') {
+            if (sort.field === 'year') {
               if (sort.direction === 'asc') {
-                return p1.id.localeCompare(p2.id);
+                return String(p1.writtenOn).localeCompare(String(p2.writtenOn));
               }
 
-              return p2.id.localeCompare(p1.id);
+              return String(p2.writtenOn).localeCompare(String(p1.writtenOn));
             }
 
             if (sort.field === 'title') {
@@ -61,7 +61,7 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
         console.error(err);
         setBooks([]);
       });
-  }, [input?.search, input?.sort]);
+  }, [input?.search, input?.sort, input?.genres, books]);
 
   const addBook = (addInput: AddBookInput): void => {
     axios

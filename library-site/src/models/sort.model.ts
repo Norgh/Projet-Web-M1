@@ -1,4 +1,4 @@
 export type Sort = {
-  field: 'title' | 'id';
+  field: 'title' | 'year';
   direction: 'asc' | 'desc';
 };

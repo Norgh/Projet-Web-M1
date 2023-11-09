@@ -3,6 +3,7 @@ import { PlainBookPresenter } from 'library-api/src/controllers/books/book.prese
 import { BookId, Genre, GenreId } from 'library-api/src/entities';
 import { BookUseCases } from 'library-api/src/useCases';
 import { BookModel, PlainBookModel } from 'library-api/src/models';
+import { CreateBookDto } from './book.dto';
 
 @Controller('books')
 export class BookController {
@@ -24,24 +25,8 @@ export class BookController {
 
   @Post('/')
   public async createBook(
-    @Body() bookData: BookModel,
-  ): Promise<PlainBookModel> {
-    const newBook = await this.bookUseCases.createBook(bookData);
-
-    const newGenre = new Genre();
-    newGenre.id = bookData.genres[0].id as GenreId;
-    newGenre.name = bookData.genres[0].name;
-
-    await this.bookUseCases.createBookGenres(newBook.id, newGenre);
-
-    const plainBook: PlainBookModel = {
-      id: newBook.id,
-      name: newBook.name,
-      writtenOn: newBook.writtenOn,
-      author: newBook.author,
-      genres: newBook.genres.map((genre) => genre.name) || [],
-    };
-
-    return plainBook;
+    @Body() bookData: CreateBookDto,
+  ): Promise<PlainBookPresenter> {
+    return this.bookUseCases.createBook(bookData);
   }
 }
