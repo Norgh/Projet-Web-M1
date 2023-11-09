@@ -47,20 +47,32 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
             return 0;
           })
           .filter(({ name }) =>
+            /*
+              Erreur non corrigeable : ESLint demande de passer à la ligne mais lorsque l'on
+              passe à la ligne il nous demande de ne pas passer à la ligne par la suite
+            */
             (input?.search
               ? name.toLowerCase().includes(input.search.toLowerCase())
               : true),
           )
           .filter(({ genres }) =>
+              /*
+              Erreur non corrigeable : ESLint demande de passer à la ligne mais lorsque l'on
+              passe à la ligne il nous demande de ne pas passer à la ligne
+              */
             (input?.genres?.length
-              ? genres.some((genre) => arrayOfIds!.includes(genre.id))
+                ? genres.some((genre) => arrayOfIds!.includes(genre.id))
               : true),
+            /*
+              Erreur non corrigeable : ESLint demande de ne pas mettre de parenthèse mais
+              indique une erreur s'il n'y a pas de parenthèse par la suite
+            */
           );
 
         setBooks(sortedBooks);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
+        // console.error(err);
         setBooks([]);
       });
   }, [input?.search, input?.sort, input?.genres, books]);
@@ -73,8 +85,7 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
       )
       .then((data) => {
         setBooks([...books, data.data]);
-      })
-      .catch((err) => console.error(err));
+      });
   };
 
   return { books, add: addBook };
@@ -94,8 +105,7 @@ export const useGetBook = (id: string): UseGetBookProvider => {
       .then((data) => {
         setBook(data.data);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         setBook(undefined);
       });
   }, [book, id]);
@@ -108,8 +118,7 @@ export const useGetBook = (id: string): UseGetBookProvider => {
       )
       .then((data) => {
         setBook(data.data);
-      })
-      .catch((err) => console.error(err));
+      });
   };
 
   return { book, update: updateBook };

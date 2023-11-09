@@ -3,6 +3,9 @@ import { FC, ReactElement } from 'react';
 type ModalProps = {
   isOpen: boolean;
   onCancel: () => void;
+  /*
+    Erreur non corrigeable :
+  */
   onSubmit?: () => void;
   title?: ReactElement | string;
   children: ReactElement;
@@ -15,6 +18,10 @@ export const Modal: FC<ModalProps> = ({
   onSubmit,
   onCancel,
 }) =>
+  /*
+    Erreur non corrigeable : ESLint demande de passer à la ligne mais lorsque l'on passe à la ligne
+    il nous demande de ne pas passer à la ligne
+  */
   (isOpen ? (
     <div className="width-2/4 border-4 border-slate-600 shadow-slate-600 shadow rounded z-10 absolute min-h-fit top-1/3 left-1/4 bg-slate-500 flex flex-col">
       <div className="flex grow-0 flex-row-reverse justify-between items-center py-2 px-4">
@@ -50,3 +57,7 @@ export const Modal: FC<ModalProps> = ({
       </div>
     </div>
   ) : undefined);
+/*
+  Erreur non corrigeable : ESLint demande de ne pas mettre de parenthèse mais
+  indique une erreur s'il n'y a pas de parenthèse
+*/

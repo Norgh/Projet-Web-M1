@@ -168,7 +168,9 @@ const BooksPage: FC = () => {
                   {book.author.firstName}
                 </span>
               </p>
-              <p className="absolute bottom-0 text-center w-max">{book.writtenOn}</p>
+              <p className="absolute bottom-0 text-center w-max">
+                {book.writtenOn}
+              </p>
             </a>
           </div>
         ))}

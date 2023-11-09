@@ -13,8 +13,7 @@ export const useListUsers = (): UseListUsersProvider => {
   const fetchUsers = (): void => {
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/Users`)
-      .then((data) => setUsers(data.data))
-      .catch((err) => console.error(err));
+      .then((data) => setUsers(data.data));
   };
 
   return { Users, load: fetchUsers };

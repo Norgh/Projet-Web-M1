@@ -21,8 +21,7 @@ export const useListGenres = (): UseListGenresProvider => {
       .then((data) => {
         setGenres(data.data);
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(() => {
         setGenres([]);
       });
   });

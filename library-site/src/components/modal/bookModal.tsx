@@ -36,6 +36,10 @@ export const AddBookModal: FC<UserDetailsModalProps> = ({
     setSelectedGenres([...selectedGenres, e.target.value]);
   };
 
+  /*
+    Erreur non corrigeable : ESLint demande de passer à la ligne mais lorsque l'on passe à la ligne
+    il nous demande de ne pas passer à la ligne
+  */
   const onChange =
     (property: keyof AddBookInput) => (e: ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
