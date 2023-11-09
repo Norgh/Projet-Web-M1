@@ -7,6 +7,7 @@ import { PlainBookModel } from '../../../models/book.model';
 
 const BooksDetailsPage: FC = () => {
   const { id } = useParams();
+  const path = '/images/authors/';
   const [books, setBooks] = useState<PlainBookModel>();
 
   // Récupération des livres depuis l'API
@@ -16,14 +17,21 @@ const BooksDetailsPage: FC = () => {
       .then((data) => {
         // const bookData = data;
         setBooks(data);
-        console.log(data);
+        // console.log(data);
       });
   }, [id]);
 
   return (
     <div className="text-center">
+      <p className="m-2">
+        <a
+          className="bg-gray-700 text-white py-2 px-4 rounded-lg m-2 hover:opacity-70 w-1/4 mx-auto"
+          href="../books"
+        >
+          Retour à liste des livres
+        </a>
+      </p>
       {books && <h1 className="text-2xl font-bold">{books.name}</h1>}
-      <br />
       <br />
       {books && (
         <p>
@@ -33,12 +41,13 @@ const BooksDetailsPage: FC = () => {
         </p>
       )}
       {books && books.author && books.author.photoUrl && (
-        <p>
+        <p className="flex justify-center">
           <Image
-            src={books.author.photoUrl}
-            alt={books.author.lastName}
-            width="200"
-            height="200"
+            className="m-3"
+            src={path + books.author.photoUrl}
+            alt={`${books.author.firstName} ${books.author.lastName}`}
+            width={250}
+            height={250}
           />
         </p>
       )}
@@ -47,7 +56,7 @@ const BooksDetailsPage: FC = () => {
           Genre:&nbsp;
           {books.genres.map((genre) => (
             <span>
-              {genre.name}
+              {genre}
               &nbsp;
             </span>
           ))}
