@@ -1,8 +1,7 @@
 import { Controller, Get, Param, Post, Body } from '@nestjs/common';
 import { PlainBookPresenter } from 'library-api/src/controllers/books/book.presenter';
-import { BookId, Genre, GenreId } from 'library-api/src/entities';
+import { BookId } from 'library-api/src/entities';
 import { BookUseCases } from 'library-api/src/useCases';
-import { BookModel, PlainBookModel } from 'library-api/src/models';
 import { CreateBookDto } from './book.dto';
 
 @Controller('books')
