@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { BookId } from 'library-api/src/entities';
+import { BookId, Genre } from 'library-api/src/entities';
 import { BookRepository } from 'library-api/src/repositories';
 import {
+  AddBookUseCaseInput,
   BookUseCasesOutput,
   PlainBookUseCasesOutput,
 } from 'library-api/src/useCases/books/book.useCases.type';
@@ -24,7 +25,32 @@ export class BookUseCases {
    * @returns Book if found
    * @throws 404: book with this ID was not found
    */
-  public async getById(id: BookId): Promise<BookUseCasesOutput> {
+  public async getById(id: BookId): Promise<PlainBookUseCasesOutput> {
     return this.bookRepository.getById(id);
+  }
+
+  /**
+   * Create a new book
+   * @param bookData Book's data
+   * @returns Created book
+   * @throws 400: invalid data
+   */
+  public async createBook(
+    bookData: AddBookUseCaseInput,
+  ): Promise<PlainBookUseCasesOutput> {
+    return this.bookRepository.createBook(bookData);
+  }
+
+  /**
+   * Add a genre to a book and save it in the database
+   * @param bookId Book's ID
+   * @param genreId Genre's ID
+   * @returns Updated book
+   */
+  public async createBookGenres(
+    bookId: BookId,
+    genre: Genre,
+  ): Promise<BookUseCasesOutput> {
+    return this.bookRepository.createBookGenres(bookId, genre);
   }
 }
