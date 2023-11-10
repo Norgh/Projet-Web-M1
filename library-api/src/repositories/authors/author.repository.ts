@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundError } from 'library-api/src/common/errors';
-import { AuthorPresenter } from 'library-api/src/controllers/authors/author.presenter';
+import {
+  AuthorPresenter,
+  PlainAuthorPresenter,
+} from 'library-api/src/controllers/authors/author.presenter';
 import { Author, AuthorId } from 'library-api/src/entities';
 import {
   AuthorRepositoryOutput,
   CreateAuthorRepositoryInput,
+  PlainAuthorRepositoryOutput,
   UpdateAuthorRepositoryInput,
 } from 'library-api/src/repositories/authors/author.repository.type';
 import { DataSource, Repository } from 'typeorm';
@@ -44,17 +48,17 @@ export class AuthorRepository extends Repository<Author> {
    * @returns Author if found
    * @throws 404: author with this ID was not found
    */
-  public async getById(id: AuthorId): Promise<AuthorRepositoryOutput> {
+  public async getById(id: AuthorId): Promise<PlainAuthorRepositoryOutput> {
     const author = await this.findOne({
       where: { id },
-      // relations: { books: true },
+      relations: { books: true },
     });
 
     if (!author) {
       throw new NotFoundError(`Author - '${id}'`);
     }
 
-    return AuthorPresenter.from(author);
+    return PlainAuthorPresenter.from(author);
   }
   /**
    * Create author
@@ -87,7 +91,7 @@ export class AuthorRepository extends Repository<Author> {
   public async patchAuthor(
     id: AuthorId,
     input: UpdateAuthorRepositoryInput,
-  ): Promise<AuthorRepositoryOutput> {
+  ): Promise<PlainAuthorRepositoryOutput> {
     await this.dataSource.transaction(async (event) => {
       await event.update<Author>(Author, id, input);
     });

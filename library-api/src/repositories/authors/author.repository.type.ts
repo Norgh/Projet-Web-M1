@@ -5,5 +5,8 @@ import {
 
 export type PlainAuthorRepositoryOutput = PlainAuthorModel;
 export type AuthorRepositoryOutput = AuthorModel;
-export type CreateAuthorRepositoryInput = Omit<PlainAuthorModel, 'id'>;
+export type CreateAuthorRepositoryInput = Omit<
+  AuthorModel,
+  'id' | 'booksWritten'
+>;
 export type UpdateAuthorRepositoryInput = Partial<CreateAuthorRepositoryInput>;

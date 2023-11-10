@@ -1,7 +1,13 @@
+// Importation du model Author qui ne provoque pas de cycle avec SmallBookPresenter
+// eslint-disable-next-line import/no-cycle
 import { AuthorPresenter } from 'library-api/src/controllers/authors/author.presenter';
 import { GenrePresenter } from 'library-api/src/controllers/genres/genre.presenter';
 import { BookId } from 'library-api/src/entities';
-import { BookModel, PlainBookModel } from 'library-api/src/models';
+import {
+  BookModel,
+  PlainBookModel,
+  SmallBookModel,
+} from 'library-api/src/models';
 
 export class PlainBookPresenter {
   id: BookId;
@@ -51,6 +57,23 @@ export class BookPresenter {
       writtenOn: data.writtenOn,
       author: AuthorPresenter.from(data.author),
       genres: data.genres,
+    });
+  }
+}
+
+export class SmallBookPresenter {
+  id: BookId;
+
+  name: string;
+
+  private constructor(data: SmallBookPresenter) {
+    Object.assign(this, data);
+  }
+
+  public static from(data: SmallBookModel): SmallBookPresenter {
+    return new SmallBookPresenter({
+      id: data.id,
+      name: data.name,
     });
   }
 }

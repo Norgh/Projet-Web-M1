@@ -17,3 +17,8 @@ export type BookModel = {
   author: Author;
   genres: string[];
 };
+
+export type SmallBookModel = {
+  id: BookId;
+  name: string;
+};

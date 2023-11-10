@@ -13,6 +13,11 @@ export type PlainBookModel = {
   genres: PlainGenreModel[];
 };
 
+export type SmallBookModel = {
+  id: string;
+  name: string;
+};
+
 export type AddBookInput = {
   name: string;
   writtenOn: string;

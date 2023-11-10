@@ -1,10 +1,23 @@
+// L'importation de SmallBookModel ne créé pas de cycle car SmallBookModel
+// n'implemente pas de classe Author contrairement aux autres classes
+// book ce qui peut créer ce conflit
+// eslint-disable-next-line import/no-cycle
+import { SmallBookModel } from '.';
+
+export type AuthorModel = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  photoUrl?: string;
+  booksWritten?: number;
+};
+
 export type PlainAuthorModel = {
   id: string;
   firstName: string;
   lastName: string;
-<<<<<<< HEAD
   photoUrl?: string;
-  booksWritten?: number;
+  books?: SmallBookModel[];
 };
 
 export type AddAuthorInput = {
@@ -17,7 +30,4 @@ export type UpdateAuthorInput = {
   firstName?: string;
   lastName?: string;
   photoUrl?: string;
-=======
-  photoUrl: string;
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
 };

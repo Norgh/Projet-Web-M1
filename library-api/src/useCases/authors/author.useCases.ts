@@ -4,6 +4,7 @@ import { AuthorRepository } from 'library-api/src/repositories';
 import {
   AuthorUseCasesOutput,
   CreateAuthorUseCasesInput,
+  PlainAuthorUseCasesOutput,
   UpdateAuthorUseCasesInput,
 } from 'library-api/src/useCases/authors/author.useCases.type';
 
@@ -25,7 +26,7 @@ export class AuthorUseCases {
    * @returns Author if found
    * @throws 404: author with this ID was not found
    */
-  public async getById(id: AuthorId): Promise<AuthorUseCasesOutput> {
+  public async getById(id: AuthorId): Promise<PlainAuthorUseCasesOutput> {
     return this.authorRepository.getById(id);
   }
 
@@ -45,9 +46,9 @@ export class AuthorUseCases {
   public async patchAuthor(
     id: AuthorId,
     input: UpdateAuthorUseCasesInput,
-  ): Promise<void> {
+  ): Promise<PlainAuthorUseCasesOutput> {
     const author = await this.getById(id);
-    await this.authorRepository.patchAuthor(author.id, input);
+    return this.authorRepository.patchAuthor(author.id, input);
   }
 
   public async deletePlainAuthor(id: AuthorId): Promise<void> {

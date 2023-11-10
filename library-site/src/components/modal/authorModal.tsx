@@ -48,7 +48,7 @@ export const AddAuthorModal: FC<AddAuthorDetailsModalProps> = ({
       isOpen={isOpen}
       onCancel={onCancel}
       onSubmit={onSubmit}
-      title="Ajout d'un livre"
+      title="Ajout d'un auteur"
     >
       <div className="width-full flex justify-between py-4">
         <div className="w-1/4 m-4">
@@ -75,14 +75,14 @@ export const AddAuthorModal: FC<AddAuthorDetailsModalProps> = ({
 type UpdateAuthorDetailsModalProps = {
   isOpen: boolean;
   author: PlainAuthorModel | undefined;
-  setAuthor: (newAuthor: UpdateAuthorInput) => void;
+  updateAuthor: (newAuthor: UpdateAuthorInput) => void;
   onClose: () => void;
 };
 
 export const UpdateAuthorModal: FC<UpdateAuthorDetailsModalProps> = ({
   isOpen,
   author,
-  setAuthor,
+  updateAuthor,
   onClose,
 }) => {
   const [newAuthor, setNewAuthor] = useState<UpdateAuthorInput | undefined>(
@@ -105,7 +105,7 @@ export const UpdateAuthorModal: FC<UpdateAuthorDetailsModalProps> = ({
     };
 
   const onSubmit = (): void => {
-    setAuthor({
+    updateAuthor({
       firstName: newAuthor?.firstName,
       lastName: newAuthor?.lastName,
       photoUrl: newAuthor?.photoUrl,
@@ -118,11 +118,11 @@ export const UpdateAuthorModal: FC<UpdateAuthorDetailsModalProps> = ({
       isOpen={isOpen}
       onCancel={onCancel}
       onSubmit={onSubmit}
-      title="Ajout d'un livre"
+      title="Modification d'un auteur"
     >
       <div className="width-full flex justify-between py-4">
         <div className="w-1/4 m-4">
-          <p className="text-lg">Nom</p>
+          <p className="text-lg">Prénom</p>
           <input
             value={newAuthor?.firstName}
             onChange={onChange('firstName')}
@@ -130,13 +130,47 @@ export const UpdateAuthorModal: FC<UpdateAuthorDetailsModalProps> = ({
           />
         </div>
         <div className="w-1/4 m-4">
-          <p className="text-lg">Prénom</p>
+          <p className="text-lg">Nom</p>
           <input
             value={newAuthor?.lastName}
             onChange={onChange('lastName')}
             className="w-full roundedw-64 p-2 rounded border border-gray-300 focus:outline-none text-black"
           />
         </div>
+      </div>
+    </Modal>
+  );
+};
+
+type DeleteAuthorModalDetailsModalProps = {
+  isOpen: boolean;
+  deleteAuthor: () => void;
+  onClose: () => void;
+};
+
+export const DeleteAuthorModal: FC<DeleteAuthorModalDetailsModalProps> = ({
+  isOpen,
+  deleteAuthor,
+  onClose,
+}) => {
+  const onCancel = (): void => {
+    onClose();
+  };
+
+  const onSubmit = (): void => {
+    deleteAuthor();
+    onClose();
+  };
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onCancel={onCancel}
+      onSubmit={onSubmit}
+      title="Suppression d'un auteur"
+    >
+      <div className="width-full flex justify-between py-4">
+        <p>Voulez-vous vraiment supprimer cet auteur ?</p>
       </div>
     </Modal>
   );

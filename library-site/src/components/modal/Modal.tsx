@@ -44,7 +44,7 @@ export const Modal: FC<ModalProps> = ({
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-4"
             onClick={onSubmit}
           >
-            Submit
+            Valider
           </button>
         ) : undefined}
         <button
@@ -52,7 +52,7 @@ export const Modal: FC<ModalProps> = ({
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           onClick={onCancel}
         >
-          Cancel
+          Annuler
         </button>
       </div>
     </div>

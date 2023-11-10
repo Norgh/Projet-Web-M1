@@ -7,7 +7,10 @@ import {
   Delete,
   Patch,
 } from '@nestjs/common';
-import { AuthorPresenter } from 'library-api/src/controllers/authors/author.presenter';
+import {
+  AuthorPresenter,
+  PlainAuthorPresenter,
+} from 'library-api/src/controllers/authors/author.presenter';
 import { AuthorId } from 'library-api/src/entities';
 import { AuthorUseCases } from 'library-api/src/useCases';
 import { CreateAuthorDto, UpdateAuthorDto } from './author.dto';
@@ -24,10 +27,12 @@ export class AuthorController {
   }
 
   @Get('/:id')
-  public async getById(@Param('id') id: AuthorId): Promise<AuthorPresenter> {
+  public async getById(
+    @Param('id') id: AuthorId,
+  ): Promise<PlainAuthorPresenter> {
     const author = await this.authorUseCases.getById(id);
 
-    return AuthorPresenter.from(author);
+    return PlainAuthorPresenter.from(author);
   }
 
   @Post()
@@ -43,8 +48,10 @@ export class AuthorController {
   public async patchAuthor(
     @Param('id') id: AuthorId,
     @Body() input: UpdateAuthorDto,
-  ): Promise<void> {
-    await this.authorUseCases.patchAuthor(id, input);
+  ): Promise<PlainAuthorPresenter> {
+    const author = await this.authorUseCases.patchAuthor(id, input);
+
+    return PlainAuthorPresenter.from(author);
   }
 
   @Delete('/:id')

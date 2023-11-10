@@ -1,9 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
-import { AddAuthorInput, PlainAuthorModel, UpdateAuthorInput } from '@/models';
+import {
+  AddAuthorInput,
+  AuthorModel,
+  PlainAuthorModel,
+  UpdateAuthorInput,
+} from '@/models';
+import { Redirect } from 'next';
 
 type UseListAuthorsProvider = {
-  authors: PlainAuthorModel[];
+  authors: AuthorModel[];
   add: (addInput: AddAuthorInput) => void;
 };
 
@@ -14,7 +20,7 @@ type ListAuthorsInput = {
 export const useListAuthors = (
   input?: ListAuthorsInput,
 ): UseListAuthorsProvider => {
-  const [authors, setAuthors] = useState<PlainAuthorModel[]>([]);
+  const [authors, setAuthors] = useState<AuthorModel[]>([]);
 
   useEffect(() => {
     axios
@@ -22,7 +28,7 @@ export const useListAuthors = (
       .then((data) => {
         const booksData = data.data;
 
-        const sortedBooks = (booksData as PlainAuthorModel[]).filter(
+        const sortedBooks = (booksData as AuthorModel[]).filter(
           ({ firstName, lastName }) =>
             /*
               Erreur non corrigeable : ESLint demande de passer à la ligne mais lorsque l'on
@@ -44,7 +50,7 @@ export const useListAuthors = (
 
   const addAuthor = (addInput: AddAuthorInput): void => {
     axios
-      .post<AddAuthorInput, AxiosResponse<PlainAuthorModel>>(
+      .post<AddAuthorInput, AxiosResponse<AuthorModel>>(
         `${process.env.NEXT_PUBLIC_API_URL}/authors`,
         addInput,
       )
@@ -59,6 +65,7 @@ export const useListAuthors = (
 type UseGetAuthorProvider = {
   author: PlainAuthorModel | undefined;
   update: (addInput: UpdateAuthorInput) => void;
+  deleteAuthor: () => void;
 };
 
 export const useGetAuthor = (id: string): UseGetAuthorProvider => {
@@ -73,7 +80,7 @@ export const useGetAuthor = (id: string): UseGetAuthorProvider => {
       .catch(() => {
         setAuthor(undefined);
       });
-  }, [author, id]);
+  }, [id]);
 
   const updateAuthor = (addInput: UpdateAuthorInput): void => {
     axios
@@ -86,5 +93,15 @@ export const useGetAuthor = (id: string): UseGetAuthorProvider => {
       });
   };
 
-  return { author, update: updateAuthor };
+  const deleteAuthor = (): void => {
+    axios
+      .delete<AddAuthorInput, AxiosResponse<PlainAuthorModel>>(
+        `${process.env.NEXT_PUBLIC_API_URL}/authors/${id}`,
+      )
+      .then(() => {
+        window.location.href = '../authors';
+      });
+  };
+
+  return { author, update: updateAuthor, deleteAuthor };
 };

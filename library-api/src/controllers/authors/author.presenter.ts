@@ -1,5 +1,11 @@
 import { AuthorId } from 'library-api/src/entities';
-import { AuthorModel, PlainAuthorModel } from 'library-api/src/models';
+import {
+  AuthorModel,
+  PlainAuthorModel,
+  SmallBookModel,
+} from 'library-api/src/models';
+// eslint-disable-next-line import/no-cycle
+import { SmallBookPresenter } from '../books/book.presenter';
 
 export class PlainAuthorPresenter {
   id: AuthorId;
@@ -9,6 +15,8 @@ export class PlainAuthorPresenter {
   lastName: string;
 
   photoUrl?: string;
+
+  books: SmallBookModel[];
 
   private constructor(data: PlainAuthorPresenter) {
     Object.assign(this, data);
@@ -20,6 +28,7 @@ export class PlainAuthorPresenter {
       firstName: data.firstName,
       lastName: data.lastName,
       photoUrl: data.photoUrl,
+      books: data.books.map(SmallBookPresenter.from),
     });
   }
 }
