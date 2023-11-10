@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { NotFoundError } from 'library-api/src/common/errors';
 import {
+  Author,
   Book,
   BookGenre,
   BookGenreId,
@@ -11,6 +12,7 @@ import {
   AddBookRepositoryInput,
   BookRepositoryOutput,
   PlainBookRepositoryOutput,
+  UpdateBookRepositoryInput,
 } from 'library-api/src/repositories/books/book.repository.type';
 import {
   adaptBookEntityToBookModel,
@@ -65,14 +67,20 @@ export class BookRepository extends Repository<Book> {
   public async createBook(
     bookData: AddBookRepositoryInput,
   ): Promise<PlainBookRepositoryOutput> {
-    // const book = this.create(bookData);
-    // await this.save(book);
     const id = await this.dataSource.transaction(async (manager) => {
+      const author = await manager.getRepository(Author).findOne({
+        where: { id: bookData.author },
+      });
+
+      if (!author) {
+        throw new NotFoundError(`Author: '${bookData.author}'`);
+      }
+
       const [book] = await manager.save<Book>(
         manager.create<Book>(Book, [
           {
             ...bookData,
-            author: { id: bookData.authorId },
+            author: { id: bookData.author },
             id: v4(),
           },
         ]),
@@ -105,6 +113,56 @@ export class BookRepository extends Repository<Book> {
     });
 
     return this.getById(id);
+  }
+
+  /**
+   * Patch book
+   * @param id Book's ID
+   * @Param create the new book
+   * @returns  Book
+   */
+  public async patchBook(
+    id: BookId,
+    input: UpdateBookRepositoryInput,
+  ): Promise<PlainBookRepositoryOutput> {
+    await this.dataSource.transaction(async (event) => {
+      await event.update<Book>(Book, id, {
+        ...input,
+        author: { id: input.author },
+      });
+      if (input.genresId) {
+        await event.delete<BookGenre>(BookGenre, {
+          book: { id },
+        });
+
+        const newGenres = await event.find<Genre>(Genre, {
+          where: {
+            id: In(input.genresId),
+          },
+        });
+
+        await event.save<BookGenre>(
+          newGenres.map((genre) =>
+            // eslint-disable-next-line implicit-arrow-linebreak
+            event.create<BookGenre>(BookGenre, {
+              id: v4(),
+              book: { id },
+              genre,
+            }),
+          ),
+        );
+      }
+    });
+    return this.getById(id);
+  }
+
+  /**
+   * Delete book
+   * @param id book id
+   */
+
+  public async deleteBook(id: BookId): Promise<void> {
+    await this.delete(id);
   }
 
   /**

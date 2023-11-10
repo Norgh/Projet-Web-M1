@@ -24,3 +24,10 @@ export type AddBookInput = {
   authorId: string;
   genresId: string[];
 };
+
+export type UpdateBookInput = {
+  name?: string;
+  writtenOn?: string;
+  authorId?: string;
+  genresId?: string[];
+};

@@ -83,7 +83,8 @@ export class AuthorRepository extends Repository<Author> {
   }
 
   /**
-   * Create author
+   * Patch author
+   * @param id Author's ID
    * @Param create the new author
    * @returns  Author
    */

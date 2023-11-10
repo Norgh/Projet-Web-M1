@@ -7,6 +7,8 @@ export type BookRepositoryOutput = BookModel;
 export type AddBookRepositoryInput = {
   name: string;
   writtenOn: string;
-  authorId: AuthorId;
+  author: AuthorId;
   genresId: GenreId[];
 };
+
+export type UpdateBookRepositoryInput = Partial<AddBookRepositoryInput>;

@@ -5,9 +5,17 @@ import Image from 'next/image';
 import { AddAuthorInput } from '../../models/author.model';
 import { useListAuthors } from '@/hooks';
 import { AddAuthorModal } from '@/components/modal/authorModal';
+import { AuthorsFilters } from '@/components/filter/authorFilter';
+import { SortAuthor } from '@/models';
 
 const AuthorsPage: FC = () => {
-  const { authors, add } = useListAuthors();
+  const [sort, setSort] = useState<SortAuthor>({
+    field: 'booksWritten',
+    direction: 'asc',
+    name: 'Nombre de livres',
+  });
+  const [search, setSearch] = useState('');
+  const { authors, add } = useListAuthors({ sort, search });
   const [isAddMode, setIsAddMode] = useState<boolean>(false);
   const path = '/images/authors/';
 
@@ -24,14 +32,12 @@ const AuthorsPage: FC = () => {
           <span className="ml-2">+</span>
         </button>
       </div>
-      <br />
-      <input
-        type="text"
-        className="w-64 p-2 rounded border border-gray-300 focus:outline-none text-black"
-        placeholder="Recherche"
+      <AuthorsFilters
+        sort={sort}
+        setSort={setSort}
+        search={search}
+        setSearch={setSearch}
       />
-      <br />
-      <br />
       <div className="flex">
         {authors.map((author) => (
           <div key={author.id} className="p-4 w-fit">

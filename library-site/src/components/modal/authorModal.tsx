@@ -98,7 +98,7 @@ export const UpdateAuthorModal: FC<UpdateAuthorDetailsModalProps> = ({
     il nous demande de ne pas passer à la ligne après un =
   */
   // eslint-disable-next-line prettier/prettier
-  const onChange = (property: keyof AddAuthorInput) => (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (property: keyof UpdateAuthorInput) => (e: ChangeEvent<HTMLInputElement>) => {
       e.preventDefault();
 
       setNewAuthor({ ...newAuthor, [property]: e.target.value });

@@ -4,9 +4,9 @@ import {
   AddAuthorInput,
   AuthorModel,
   PlainAuthorModel,
+  SortAuthor,
   UpdateAuthorInput,
 } from '@/models';
-import { Redirect } from 'next';
 
 type UseListAuthorsProvider = {
   authors: AuthorModel[];
@@ -15,6 +15,7 @@ type UseListAuthorsProvider = {
 
 type ListAuthorsInput = {
   search?: string;
+  sort?: SortAuthor;
 };
 
 export const useListAuthors = (
@@ -26,27 +27,40 @@ export const useListAuthors = (
     axios
       .get(`${process.env.NEXT_PUBLIC_API_URL}/authors`)
       .then((data) => {
-        const booksData = data.data;
+        const authorData = data.data;
 
-        const sortedBooks = (booksData as AuthorModel[]).filter(
-          ({ firstName, lastName }) =>
+        const sort = input?.sort ?? { field: 'year', direction: 'asc' };
+
+        const sortedAuthor = (authorData as AuthorModel[])
+          .sort((p1, p2) => {
+            if (sort.field === 'year') {
+              if (sort.direction === 'asc') {
+                return (p1.booksWritten || 1) - (p2.booksWritten || 1);
+              }
+
+              return (p2.booksWritten || 1) - (p1.booksWritten || 1);
+            }
+
+            return 0;
+          })
+          .filter(({ firstName, lastName }) =>
             /*
               Erreur non corrigeable : ESLint demande de passer à la ligne mais lorsque l'on
               passe à la ligne il nous demande de ne pas passer à la ligne par la suite
             */
             (input?.search
-              ? firstName.toLowerCase().includes(input.search.toLowerCase()) ||
-                lastName.toLowerCase().includes(input.search.toLowerCase())
+              ? lastName.toLowerCase().includes(input.search.toLowerCase())
+              || firstName.toLowerCase().includes(input.search.toLowerCase())
               : true),
           );
 
-        setAuthors(sortedBooks);
+        setAuthors(sortedAuthor);
       })
       .catch(() => {
         // console.error(err);
         setAuthors([]);
       });
-  }, [input?.search, authors]);
+  }, [input?.search, input?.sort]);
 
   const addAuthor = (addInput: AddAuthorInput): void => {
     axios

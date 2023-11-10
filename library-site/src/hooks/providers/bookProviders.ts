@@ -1,6 +1,12 @@
 import axios, { AxiosResponse } from 'axios';
 import { useState, useEffect } from 'react';
-import { AddBookInput, PlainBookModel, PlainGenreModel, Sort } from '@/models';
+import {
+  AddBookInput,
+  UpdateBookInput,
+  PlainBookModel,
+  PlainGenreModel,
+  SortBook,
+} from '@/models';
 
 type UseListBooksProvider = {
   books: PlainBookModel[];
@@ -9,7 +15,7 @@ type UseListBooksProvider = {
 
 type ListBooksInput = {
   search?: string;
-  sort?: Sort;
+  sort?: SortBook;
   genres?: PlainGenreModel[];
 };
 
@@ -63,10 +69,6 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
             (input?.genres?.length
                 ? genres.some((genre) => arrayOfIds!.includes(genre.id))
               : true),
-            /*
-              Erreur non corrigeable : ESLint demande de ne pas mettre de parenthèse mais
-              indique une erreur s'il n'y a pas de parenthèse par la suite
-            */
           );
 
         setBooks(sortedBooks);
@@ -75,7 +77,7 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
         // console.error(err);
         setBooks([]);
       });
-  }, [input?.search, input?.sort, input?.genres, books]);
+  }, [input?.search, input?.sort, input?.genres]);
 
   const addBook = (addInput: AddBookInput): void => {
     axios
@@ -93,7 +95,8 @@ export const useListBooks = (input?: ListBooksInput): UseListBooksProvider => {
 
 type UseGetBookProvider = {
   book: PlainBookModel | undefined;
-  update: (addInput: AddBookInput) => void;
+  update: (addInput: UpdateBookInput) => void;
+  deleteBook: () => void;
 };
 
 export const useGetBook = (id: string): UseGetBookProvider => {
@@ -110,9 +113,9 @@ export const useGetBook = (id: string): UseGetBookProvider => {
       });
   }, [book, id]);
 
-  const updateBook = (addInput: AddBookInput): void => {
+  const updateBook = (addInput: UpdateBookInput): void => {
     axios
-      .post<AddBookInput, AxiosResponse<PlainBookModel>>(
+      .patch<UpdateBookInput, AxiosResponse<PlainBookModel>>(
         `${process.env.NEXT_PUBLIC_API_URL}/books/${id}`,
         addInput,
       )
@@ -121,5 +124,15 @@ export const useGetBook = (id: string): UseGetBookProvider => {
       });
   };
 
-  return { book, update: updateBook };
+  const deleteBook = (): void => {
+    axios
+      .delete<AddBookInput, AxiosResponse<PlainBookModel>>(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${id}`,
+      )
+      .then(() => {
+        window.location.href = '../books';
+      });
+  };
+
+  return { book, update: updateBook, deleteBook };
 };
