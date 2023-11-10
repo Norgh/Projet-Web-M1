@@ -105,6 +105,11 @@ export class BookRepository extends Repository<Book> {
     });
 
     return this.getById(id);
+<<<<<<< HEAD
+=======
+
+    // return adaptBookEntityToBookModel(book);
+>>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
   }
 
   /**

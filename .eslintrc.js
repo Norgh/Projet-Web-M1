@@ -35,6 +35,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'indent': 'off',
     'object-curly-newline': 'off',
+    'function-paren-newline': 'off',
     'max-classes-per-file': 'off',
     '@typescript-eslint/explicit-member-accessibility': ["error", {
       accessibility: 'explicit',

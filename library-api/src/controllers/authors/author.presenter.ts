@@ -20,6 +20,7 @@ export class PlainAuthorPresenter {
       firstName: data.firstName,
       lastName: data.lastName,
       photoUrl: data.photoUrl,
+<<<<<<< HEAD
     });
   }
 }
@@ -46,6 +47,8 @@ export class AuthorPresenter {
       lastName: data.lastName,
       photoUrl: data.photoUrl,
       booksWritten: data.booksWritten,
+=======
+>>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
     });
   }
 }

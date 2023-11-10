@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
 import { AddAuthorInput, PlainAuthorModel, UpdateAuthorInput } from '@/models';
@@ -88,3 +89,33 @@ export const useGetAuthor = (id: string): UseGetAuthorProvider => {
 
   return { author, update: updateAuthor };
 };
+=======
+import axios from 'axios';
+import { useState } from 'react';
+import { PlainAuthorModel } from '@/models';
+
+type UseListAuthorsProvider = {
+  Authors: PlainAuthorModel[];
+  load: () => void;
+};
+
+export const useListAuthors = (): UseListAuthorsProvider => {
+  const [Authors, setAuthors] = useState<PlainAuthorModel[]>([]);
+
+  const fetchAuthors = (): void => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/Authors`)
+      .then((data) => setAuthors(data.data));
+  };
+
+  return { Authors, load: fetchAuthors };
+};
+
+type AuthorProviders = {
+  useListAuthors: () => UseListAuthorsProvider;
+};
+
+export const useAuthorsProviders = (): AuthorProviders => ({
+  useListAuthors,
+});
+>>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
