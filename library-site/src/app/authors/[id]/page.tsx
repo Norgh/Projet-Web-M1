@@ -16,7 +16,6 @@ const AuthorsDetailsPage: FC = () => {
       .then((data) => {
         // const authorData = data;
         setAuthors(data);
-        console.log(data);
       });
   }, [id]);
 

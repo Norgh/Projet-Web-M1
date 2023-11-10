@@ -2,13 +2,13 @@
 
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { useGetBook } from '@/hooks';
 
 const BooksDetailsPage: FC = () => {
   const { id } = useParams();
   const path = '/images/authors/';
-  const { book, update } = useGetBook(id as string);
+  const { book } = useGetBook(id as string);
 
   return (
     <div className="text-center">

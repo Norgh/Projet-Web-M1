@@ -62,6 +62,7 @@ const BookFilters: FC<BookFiltersProps> = ({
           className="bg-gray-700 text-white py-2 px-4 rounded-lg m-2 hover:opacity-70"
           key={`${currentSort.direction}-${currentSort.field}`}
           type="button"
+          // Erreur ESLint demande de mettre à la ligne mais veut ensuite le supprimer
           onClick={(): void => setSort(currentSort)}
           disabled={
             sort.direction === currentSort.direction

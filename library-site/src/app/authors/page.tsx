@@ -18,10 +18,9 @@ const AuthorsPage: FC = () => {
         // const AuthorData = data;
         setAuthors(data);
         setFilteredAuthors(data);
-        console.log(data);
       })
       .catch((error) => {
-        console.error('Erreur lors de la récupération des auteurs :', error);
+        throw new Error('Erreur lors de la récupération des auteurs :', error);
       });
   }, []);
 
