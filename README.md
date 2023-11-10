@@ -1,7 +1,7 @@
 # Projet-Web-M1
 
 --- Une règle ESLint a été désactivée, avec votre accord lors du cours.
---- Certaines erreurs n'ont pas non pas pu être résolues et un commentaire en explique la raison au dessus de l'erreur en question.
+--- Certaines erreurs n'ont pas pu être résolues et un commentaire en explique la raison au dessus de l'erreur en question.
 
 Fonctionnalités implémentées :
 
