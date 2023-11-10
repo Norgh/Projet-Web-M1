@@ -26,9 +26,11 @@ Un bouton pour revenir à la page précédente est également présent.
 
 Page auteurs :
 J'ai une page avec la liste des auteurs présentant leur id, leur nom ainsi que leur prénom et leur photo (si elle existe).
+Je peux également ajouter un auteur à la liste.
 
 Page détails d'un auteur :
 Je peux cliquer sur un auteur pour aller sur sa page de détails et j'y trouve son nom, sa photo si elle existe.
+Je peux également modifier ou supprimer l'auteur.
 
 ----- GROUPE 15 -----
 
