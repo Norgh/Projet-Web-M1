@@ -12,11 +12,7 @@ export class PlainBookPresenter {
 
   genres: GenrePresenter[];
 
-<<<<<<< HEAD
   author: AuthorPresenter;
-=======
-  author: PlainAuthorPresenter;
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
 
   private constructor(data: PlainBookPresenter) {
     Object.assign(this, data);
@@ -27,11 +23,7 @@ export class PlainBookPresenter {
       id: data.id,
       name: data.name,
       writtenOn: data.writtenOn,
-<<<<<<< HEAD
       author: AuthorPresenter.from(data.author),
-=======
-      author: PlainAuthorPresenter.from(data.author),
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
       genres: data.genres.map(GenrePresenter.from),
     });
   }
@@ -57,11 +49,7 @@ export class BookPresenter {
       id: data.id,
       name: data.name,
       writtenOn: data.writtenOn,
-<<<<<<< HEAD
       author: AuthorPresenter.from(data.author),
-=======
-      author: PlainAuthorPresenter.from(data.author),
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
       genres: data.genres,
     });
   }

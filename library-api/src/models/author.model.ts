@@ -5,7 +5,6 @@ export type PlainAuthorModel = {
   firstName: string;
   lastName: string;
   photoUrl?: string;
-<<<<<<< HEAD
 };
 
 export type AuthorModel = {
@@ -14,6 +13,4 @@ export type AuthorModel = {
   lastName: string;
   photoUrl?: string;
   booksWritten?: number;
-=======
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
 };

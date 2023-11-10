@@ -8,11 +8,7 @@ import { useGetBook } from '@/hooks';
 const BooksDetailsPage: FC = () => {
   const { id } = useParams();
   const path = '/images/authors/';
-<<<<<<< HEAD
-  const { book, update } = useGetBook(id as string);
-=======
   const { book } = useGetBook(id as string);
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
 
   return (
     <div className="text-center">

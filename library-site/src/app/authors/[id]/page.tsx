@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
-<<<<<<< HEAD
 import React, { FC, useState } from 'react';
 import { useGetAuthor } from '@/hooks';
 import { UpdateAuthorModal } from '@/components/modal/authorModal';
@@ -36,53 +35,17 @@ const AuthorsDetailsPage: FC = () => {
           <Image
             src={path + author.photoUrl}
             alt={`${author.firstName} ${author.lastName}`}
-=======
-import React, { FC, useEffect, useState } from 'react';
-import { PlainAuthorModel } from '../../../models/author.model';
-
-const AuthorsDetailsPage: FC = () => {
-  const { id } = useParams();
-  const [authors, setAuthors] = useState<PlainAuthorModel>();
-  const path = '/images/authors/';
-  // Récupération des auteurs depuis l'API
-  useEffect(() => {
-    fetch(`http://localhost:3001/authors/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        // const authorData = data;
-        setAuthors(data);
-      });
-  }, [id]);
-
-  return (
-    <div className="text-center">
-      {authors && (
-        <p>
-          {authors.firstName}
-          &nbsp;
-          {authors.lastName}
-        </p>
-      )}
-      {authors?.photoUrl && (
-        <p>
-          <Image
-            src={path + authors.photoUrl}
-            alt={`${authors.firstName} ${authors.lastName}`}
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
             width={250}
             height={250}
           />
         </p>
       )}
-<<<<<<< HEAD
       <UpdateAuthorModal
         isOpen={isUpdateMode}
         onClose={(): void => setIsUpdateMode(false)}
         author={author}
         setAuthor={(newAuthor: UpdateAuthorInput): void => update(newAuthor)}
       />
-=======
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
     </div>
   );
 };

@@ -62,7 +62,6 @@ const BookFilters: FC<BookFiltersProps> = ({
           className="bg-gray-700 text-white py-2 px-4 rounded-lg m-2 hover:opacity-70"
           key={`${currentSort.direction}-${currentSort.field}`}
           type="button"
-<<<<<<< HEAD
           onClick={(): void => setSort(currentSort)}
           // Eslint demande des retours à la ligne qui entrent en conflits entre eux
           // eslint-disable-next-line prettier/prettier
@@ -71,16 +70,6 @@ const BookFilters: FC<BookFiltersProps> = ({
           {currentSort.field}
           &nbsp;
           {currentSort.direction}
-=======
-          // Erreur ESLint demande de mettre à la ligne mais veut ensuite le supprimer
-          onClick={(): void => setSort(currentSort)}
-          disabled={
-            sort.direction === currentSort.direction
-            && sort.field === currentSort.field
-          }
-        >
-          {currentSort.field} {currentSort.direction}
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
         </button>
       ))}
       <div className="w-100">
@@ -131,10 +120,6 @@ const BooksPage: FC = () => {
   const [filterGenres, setFilterGenres] = useState<PlainGenreModel[]>([]);
   const { books, add } = useListBooks({ sort, search, genres: filterGenres });
   const [isAddMode, setIsAddMode] = useState<boolean>(false);
-<<<<<<< HEAD
-=======
-  const path = '/images/authors/';
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
 
   return (
     <div className="text-center">
@@ -162,11 +147,7 @@ const BooksPage: FC = () => {
           <div key={book.id}>
             <a
               className="flex flex-col items-center bg-orange-800 border-2 border-orange-950 p-4 w-60 h-72 rounded-2xl relative bg-clip-border bg-origin-border bg-center bg-no-repeat bg-contain"
-<<<<<<< HEAD
               // style={{ backgroundImage: `url(${path + book.author.photoUrl})` }}
-=======
-              style={{ backgroundImage: `url(${path + book.author.photoUrl})` }}
->>>>>>> 13b9bd6cc660e7ec19cdc50909257fef9fb3afbd
               href={`books/${book.id}`}
             >
               <h2 className="text-2xl font-semibold mb-1">{book.name}</h2>
